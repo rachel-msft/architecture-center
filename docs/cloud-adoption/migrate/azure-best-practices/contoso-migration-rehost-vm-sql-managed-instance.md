@@ -72,7 +72,7 @@ As part of the solution design process, Contoso did a feature comparison between
 
 - Managed Instance aims to deliver almost 100% compatibility with the latest on-premises SQL Server version. Microsoft recommends Managed instance for customers running SQL Server on-premises or on IaaS VM who want to migrate their apps to a fully managed service with minimal design changes.
 - Contoso is planning to migrate a large number of apps from on-premises to IaaS. Many of these are ISV provided. Contoso realizes that using Managed Instance will help ensure database compatibility for these apps, rather than using SQL Database which might not be supported.
-- Contoso can simply do a lift-and-shift migration to Managed Instance using the fully automated Database Migration Service (DMS). With this service in place, Contoso can reuse it for future database migrations.
+- Contoso can simply do a "lift and shift" migration to Managed Instance using the fully automated Azure Database Migration Service. With this service in place, Contoso can reuse it for future database migrations.
 - SQL Managed Instance supports SQL Server Agent which is an important issue for the SmartHotel360 app. Contoso needs this compatibility, otherwise it will have to redesign maintenance plans required by the app.
 - With Software Assurance, Contoso can exchange their existing licenses for discounted rates on a SQL Database Managed Instance using the Azure Hybrid Benefit for SQL Server. This can allow Contoso to save up to 30% on Managed Instance.
 - SQL Managed Instance is fully contained in the virtual network, so it provides greater isolation and security for Contoso’s data. Contoso can get the benefits of the public cloud, while keeping the environment isolated from the public Internet.
@@ -96,8 +96,8 @@ Contoso evaluates the proposed design by putting together a pros and cons list.
 Contoso will migrate the web and data tiers of its SmartHotel360 app to Azure by completing these steps:
 
 1. Contoso already has its Azure infrastructure in place, so it just needs to add a couple of specific Azure components for this scenario.
-2. The data tier will be migrated by using the Database Migration Service. The Database Migration Service connects to the on-premises SQL Server VM across a site-to-site VPN connection between the Contoso datacenter and Azure. Then, the Database Migration Service migrates the database.
-3. The web tier will be migrated by using a lift-and-shift migration by using Site Recovery. The process entails preparing the on-premises VMware environment, setting up and enabling replication, and migrating the VMs by failing them over to Azure.
+2. The data tier will be migrated by using the Azure Database Migration Service. This service connects to the on-premises SQL Server VM across a site-to-site VPN connection between the Contoso datacenter and Azure. The service then migrates the database.
+3. The web tier will be migrated by using a "lift and shift" migration by using Site Recovery. The process entails preparing the on-premises VMware environment, setting up and enabling replication, and migrating the VMs by failing them over to Azure.
 
      ![Migration architecture](media/contoso-migration-rehost-vm-sql-managed-instance/migration-architecture.png)
 
@@ -146,7 +146,7 @@ To set up an Azure SQL Database Managed Instance, Contoso needs a subnet that me
 - The subnet must be dedicated. It must be empty, and it can't contain any other cloud service. The subnet can't be a gateway subnet.
 - After the Managed Instance is created, Contoso should not add resources to the subnet.
 - The subnet can't have a network security group associated with it.
-- The subnet must have a user-defined routing (UDR) route table. The only route assigned should be 0.0.0.0/0 next hop internet.
+- The subnet must have a user-defined route table. The only route assigned should be 0.0.0.0/0 next-hop internet.
 - Optional custom DNS: If custom DNS is specified on the Azure virtual network, Azure's recursive resolvers IP address (such as 168.63.129.16) must be added to the list. Learn how to [configure custom DNS for a Managed Instance](/azure/sql-database/sql-database-managed-instance-custom-dns).
 - The subnet must not have a service endpoint (storage or SQL) associated with it. Service endpoints should be disabled on the virtual network.
 - The subnet must have a minimum of 16 IP addresses. Learn how to [size the Managed Instance subnet](/azure/sql-database/sql-database-managed-instance-vnet-configuration).
@@ -200,7 +200,7 @@ Contoso considers these factors:
 
  To set up routing Contoso admins do the following:
 
-1. They create a UDR (route) table in the **ContosoNetworkingRG** resource group.
+1. They create a user-defined route table in the **ContosoNetworkingRG** resource group.
 
     ![Route table](media/contoso-migration-rehost-vm-sql-managed-instance/mi-route-table.png)
 
